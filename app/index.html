@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+<head>
+  <meta charset="utf-8">
+  <title>Relocator App</title>
+  <link rel="stylesheet" href="css/app.css"/>
+</head>
+<body> 
+  
+  <div ng-controller="LoginForm">
+  <a href="#">Sign In</a>
+  <br>
+  
+  	<form name="UserLogin" class="login-form" ng-submit="login()">
+  		<label>Username</label>
+  		<input type="text" placeholder="username" ng-model="username" required/>
+  		
+  		<label>Password</label>
+  		<input type="password" placeholder="password" ng-model="password" required/>
+  		
+      	<input type="submit" value="Login" name="Login" />
+  	</form>
+  	
+  	<h2>--- DEBUG VIEW ---</h2>
+  	<p>Username: {{username}}</p>
+  	<p>Password: {{password}}</p>
+  	<hr>
+  	
+  </div>
+  	
+  <div ng-controller="MainCont">
+  <ul>
+  	<li><a href="Compare">Compare Cities</a></li>
+  </ul>
+  
+  <h1>Find your Ideal Spot to Make your New Home!</h1>
+  	<p>Whether its to find new opportunities or to start a new life elsewhere, IdealSpot will provide you the necessary information to help you find your ideal city. Using data visualization, IdealSpot makes it easy to compare cities across the US.</p>
+  
+  <div ng-view></div>
+  </div>
+  
+  <footer>
+  <span>&copy;2013 Deion O'Garro</span>
+  </footer>
+
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+  -->
+  <script src="lib/angular/angular.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</body>
+</html>
