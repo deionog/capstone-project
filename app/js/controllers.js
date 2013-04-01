@@ -2,14 +2,6 @@
 
 /* Controllers */
 
-angular.module("myApp", []).config(['$routeProvider', function($routeProvider) {
-	$routeProvider.when('/Compare', {
-		templateUrl: '../compare.html',
-		controller: 'CompareCrtl'
-	});
-
-}]);
-
 function LoginForm($scope) {
 
 	$scope.username = "";
@@ -28,6 +20,11 @@ function MainCont($scope, $route, $routeParams, $location) {
 }
 
 function CompareCrtl($scope, $routeParams) {
+	$scope.name = "CompareCrtl";
+	$scope.params = $routeParams;
+}
+
+function WelcomeCrtl($scope, $routeParams) {
 	$scope.name = "CompareCrtl";
 	$scope.params = $routeParams;
 }
