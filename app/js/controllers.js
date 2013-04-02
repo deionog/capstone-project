@@ -22,9 +22,20 @@ function MainCont($scope, $route, $routeParams, $location) {
 function CompareCrtl($scope, $routeParams) {
 	$scope.name = "CompareCrtl";
 	$scope.params = $routeParams;
+	
+	angular.extend($scope, {
+	center: {
+		lat: 45, // initial map center latitude
+		lng: -73 // initial map center longitude
+	},
+	markers: [], // an array of markers,
+	zoom: 8 // the zoom level
+	});
 }
 
 function WelcomeCrtl($scope, $routeParams) {
 	$scope.name = "CompareCrtl";
 	$scope.params = $routeParams;
 }
+
+
