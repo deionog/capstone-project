@@ -93,8 +93,33 @@
             center: that.center,
             zoom: that.zoom,
             draggable: that.draggable,
+            scrollwheel: false,
+        	streetViewControl: false,
+        	mapTypeControl: false,
             mapTypeId : google.maps.MapTypeId.ROADMAP
           }));
+          
+          // Initialize First Layer of Counties
+    var county_layer1 = new google.maps.FusionTablesLayer({
+        query: {
+            select: 'geometry',
+            from: '1bt98zxaQcCcxgYnQB0n7edRTSl28qpsoNusFAwo'
+        },
+        suppressInfoWindows:false
+    });
+
+    county_layer1.setMap(_instance);
+
+    // Initialize Second Layer of Counties
+    var county_layer2 = new google.maps.FusionTablesLayer({
+		query: {
+            select: 'geometry',
+            from: '1MzwxY87EdI8Z5FT5vAIKb8qhgP_v355P2Gp97Y4'
+        },
+        suppressInfoWindows:false
+    });
+
+    county_layer2.setMap(_instance);
           
           google.maps.event.addListener(_instance, "dragstart",
               

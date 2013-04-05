@@ -25,11 +25,11 @@ function CompareCrtl($scope, $routeParams) {
 	
 	angular.extend($scope, {
 	center: {
-		lat: 45, // initial map center latitude
-		lng: -73 // initial map center longitude
+		lat: 38, // initial map center latitude
+		lng: -97 // initial map center longitude
 	},
 	markers: [], // an array of markers,
-	zoom: 8 // the zoom level
+	zoom: 5 // the zoom level
 	});
 }
 
