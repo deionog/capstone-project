@@ -2,13 +2,25 @@
 
 /* Controllers */
 
-function LoginForm($scope) {
+function LoginForm($scope, $http) {
 
 	$scope.username = "";
 	$scope.password = "";
 	
 	$scope.login = function() {
-		window.alert("Yes that is how i FEEL!!");
+		//$http.post('services/logintest.php', [{'uname':$scope.username, 'pwd':$scope.password}])
+		
+		$http({
+		url:'services/login.php',
+		data : {'uname':$scope.username, 'pwd':$scope.password},
+		method : 'POST',
+		headers : {'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'}
+	}).success(function(data,status){
+		$scope.loginResults = data;
+		$scope.status = status;
+		if (status == 200) window.alert("Success");
+		else window.alert("Failed");
+		});
 	}; 
 	
 }
