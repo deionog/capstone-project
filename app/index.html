@@ -7,8 +7,8 @@
 </head>
 <body> 
   
-  <div ng-controller="LoginForm">
-  <a href="#">Sign In</a>
+  <div ng-controller="LoginForm" class="login-menu">
+  <div class="sign-in"><a href="#">Preferences &nbsp;</a></div><div class="arrow-down"></div>
   <br>
   
   	<form name="UserLogin" class="login-form" ng-submit="login()">
@@ -21,21 +21,22 @@
       	<input type="submit" value="Login" name="Login" />
   	</form>
   	
-  	<h2>--- DEBUG VIEW ---</h2>
+  	<!--<h2>--- DEBUG VIEW ---</h2>
   	<p>Username: {{username}}</p>
   	<p>Password: {{password}}</p>
   	<p>Results:</p>
   	<p>{{status}}</p>
   	<pre>{{loginResults}}</pre>
-  	<hr>
+  	-->
   	
   </div>
+  
+  <section class="header">
+  	<a href="#/welcome"><img src="img/mylogo.png" /></a>
+  	<a href="#/compare" class="menu-item">Compare Cities</a>
+  </section>
   	
-  <div ng-controller="MainCont">
-  <ul>
-  	<li><a href="#/welcome">Welcome</a></li>
-  	<li><a href="#/compare">Compare Cities</a></li>
-  </ul>
+  <div ng-controller="MainCont" class="main-content">
   
   <div ng-view></div>
   
