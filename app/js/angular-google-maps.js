@@ -103,8 +103,8 @@
         styles: [
             {
                 stylers: [
-                	//{ hue: "#ffc477" },
-                    { saturation: 0 }
+                	{ hue: "#ffc477" },
+                    { saturation: -25 }
                 ]
             },{
                 featureType: "road",
@@ -126,9 +126,65 @@
         ]
     	});
     	
-    	var ctaLayer = new google.maps.KmlLayer('http://deionlive.com/capstone/US_Regions_State_Boundaries.kml');
+    	var cityInput1 = (document.getElementById('city1'));
+    	var options = {
+			  types: ['(cities)'],
+			  componentRestrictions: {country: 'us'}
+			};
+    	
+  		var autocomplete = new google.maps.places.Autocomplete(cityInput1,options);
+  		
+  		autocomplete.bindTo('bounds', _instance);
+  		
+  		var infowindow = new google.maps.InfoWindow();
+	  var marker = new google.maps.Marker({
+		map: _instance
+	  });
 
-ctaLayer.setMap(_instance);
+  		
+  		google.maps.event.addListener(autocomplete, 'place_changed', function() {
+  			infowindow.close();
+    marker.setVisible(false);
+    cityInput1.className = '';
+    var place = autocomplete.getPlace();
+
+    // If the place has a geometry, then present it on a map.
+    if (place.geometry.viewport) {
+      _instance.fitBounds(place.geometry.viewport);
+    } else {
+      _instance.setCenter(place.geometry.location);
+      _instance.setZoom(5);  // Why 17? Because it looks good.
+    }
+    marker.setIcon(({
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(35, 35)
+    }));
+    marker.setPosition(place.geometry.location);
+    marker.setVisible(true);
+
+    var address = '';
+    if (place.address_components) {
+      address = [
+        (place.address_components[0] && place.address_components[0].short_name || ''),
+        (place.address_components[1] && place.address_components[1].short_name || ''),
+        (place.address_components[2] && place.address_components[2].short_name || '')
+      ].join(' ');
+    }
+
+    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address +
+    "<br><button onclick=\"updateList\">Add City</button>"
+    );
+    infowindow.open(_instance, marker);
+  		
+  		});
+  		
+  		
+    	//var ctaLayer = new google.maps.KmlLayer('http://deionlive.com/capstone/US_Regions_State_Boundaries.kml');
+
+//ctaLayer.setMap(_instance);
            
    /*      // Initialize First Layer of Counties
     var county_layer1 = new google.maps.FusionTablesLayer({

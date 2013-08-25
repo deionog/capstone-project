@@ -3,19 +3,20 @@ var geoXml = null;
 var geoXmlDoc = null;
 var map = null;
 var myLatLng = null;
-var myGeoXml3Zoom = true;
+var myGeoXml3Zoom = false;
 var sidebarHtml = "";
 var infowindow = null;
 var kmlLayer = null;
+var countyUrl = "";
 var filename = "http://deionlive.com/capstone/US_Regions_State_Boundaries.kml";
 
 function initialize() {
       myLatLng = new google.maps.LatLng(37.422104808,-122.0838851);
       // these set the initial center, zoom and maptype for the map 
       // if it is not specified in the query string
-      var lat = 37.422104808;
-      var lng = -122.0838851;
-      var zoom = 18;
+      var lat = 38;
+      var lng = -97;
+      var zoom = 4;
       var maptype = google.maps.MapTypeId.ROADMAP;
 
       // If there are any parameters at eh end of the URL, they will be in  location.search
@@ -89,17 +90,31 @@ function initialize() {
       //google.maps.event.addListener(map, 'center_changed', makeLink);
       //google.maps.event.addListener(map, 'bounds_changed', makeLink);
       //google.maps.event.addListener(map, 'zoom_changed', makeLink);
+      
+      //$('.loader-image').toggle();
 }
 
 function resetLayer() {
 	if (map.getZoom() < 5 && wasZoomed){
 		wasZoomed = false;
-		console.log(geoXml.docs[1]);
-		geoXml.hideDocument(geoXml.docs[1]);
+		map.setOptions({draggable:true});
+		resetCounty();
+		
 		geoXml.showDocument(geoXml.docs[0]);
 		//geoXmlDoc = null;
 		//geoXml.parse(filename); 
 	}
+}
+
+function resetCounty() {
+	for (var i=0;i<geoXml.docs.length;i++) {	
+			if(geoXml.docs[i].baseUrl == countyUrl){
+				geoXml.hideDocument(geoXml.docs[i]);
+				console.log(geoXml.docs[i]);
+			} else {
+				console.log("URL not found");
+			}
+		}
 }
 
 function kmlPgClick(pm) {
@@ -226,21 +241,28 @@ function highlightPoly(poly, polynum, place) {
     poly.setOptions(poly.normalStyle);
   });
   google.maps.event.addListener(poly,"click", function() {
+  	//resetCounty();
+  	$('.loader-image').toggle();
+
   	map.setZoom(6);
   	wasZoomed = true;
+  	map.setOptions({draggable:false});
   	//hide_kmlLayer();
-  	$.getJSON('states.json', function(data){
+  	$.getJSON('../states.json', function(data){
   		$.each(data.states, function(key, val) {	
   			if (val.stateName == place.name){
   				var currlatlng = new google.maps.LatLng(val.lat, val.lon);
   				map.setCenter(currlatlng);
   			console.log("You need the file:" + val.fileName);
   			geoXml.hideDocument(geoXml.docs[0]);
-  			geoXml.parse("http://deionlive.com/capstone/" + val.fileName);
+  			countyUrl = "http://deionlive.com/capstone/Counties by State/" + val.fileName;
+  			geoXml.parse(countyUrl);
+  			
   			}
   		});
   	});
   	console.log(place.name);
+  	$('.loader-image').toggle();
   	//geoXml.parse("http://deionlive.com/capstone/UScounties.kml");
   });
 }  
@@ -250,7 +272,7 @@ function useTheData(doc){
   var currentBounds = map.getBounds();
   if (!currentBounds) currentBounds=new google.maps.LatLngBounds();
   // Geodata handling goes here, using JSON properties of the doc object
-  sidebarHtml = '<table><tr><td><a href="javascript:showAll();">Show All</a></td></tr>';
+ // sidebarHtml = '<table><tr><td><a href="javascript:showAll();">Show All</a></td></tr>';
 //  var sidebarHtml = '<table>';
   geoXmlDoc = doc[0];
   for (var i = 0; i < geoXmlDoc.placemarks.length; i++) {
@@ -291,8 +313,8 @@ function useTheData(doc){
 
 /*    doc[0].markers[i].setVisible(false); */
   }
-  sidebarHtml += "</table>";
-  document.getElementById("sidebar").innerHTML = sidebarHtml;
+  //sidebarHtml += "</table>";
+  //document.getElementById("sidebar").innerHTML = sidebarHtml;
 };  
 
    function hide_kml(){

@@ -1,7 +1,233 @@
-<div class="home-content">
-	<h1>Find the city that suits you!</h1>
-	
-	<p>Whether its to find new opportunities or to start a new life elsewhere, IdealSpot will provide you the necessary information to help you find your ideal city. Using data visualization, IdealSpot makes it easy to compare cities across the US.</p>
-	<div class="home-image"><a href="#/search" class="menu-item">Get Started >>></a></div>
-
+<div id="intro">
+	<h1>It's easy to find the city you want to move to.<br></h1>
+	<span id="starter-link">
+		<a href="#/start" class="medium-button">Get Started >>></a>
+	<span>
 </div>
+		
+<hr class="divider">
+		
+<div class="content-1">
+	<p>IdealSpot was developed to help you find a city that fits needs</p>
+	<span class="image-holder"><img src="img/main/City-Map-256.png" /></span>
+</div>
+				
+<div class="content-2">				
+	<p>Using visualization to make it easier to compare cities your interested in. Customize your results to what you want and find the place you need.</p>
+	<img src="img/main/bars.png" /><img src="img/main/line_chart.png" />
+</div>
+		
+	<!--
+<div class="home-content">
+<h1>Find the city that suits you!</h1>
+	
+	<p>Whether its to find new opportunities or to start a new life elsewhere, IdealSpot will provide you the necessary information to help you find your ideal city. Using data visualization, IdealSpot makes it easy to compare cities across the US.</p> 
+
+	<div class="home-image"><a href="#/start" class="big-button">Get Started >>></a></div>
+	
+		-->
+	<!--<a href="#/search">GeoXml test page</a> 
+
+## Example API call to get census data by county ##
+
+http://api.census.gov/data/2010/sf1?key=93b239eaf27cd41643845af4697fab56b8ea4e8f&get=P0010001,NAME&gnis=county:00161528	
+
+http://api.census.gov/data/2011/acs5?key=...&get=B00001_001E&for=county:*
+	
+	
+	
+	<hr style="
+    height: 2px;
+    background: whitesmoke;
+    border: 1px solid #eee;
+">
+-->
+
+<!--	<script>
+		var width = 940,
+			height = 500,
+			centered;
+		var county;
+
+		var path = d3.geo.path();
+
+		var svg = d3.select(".home-content").append("svg")
+			.attr("width", width)
+			.attr("height", height);
+
+		svg.append("rect")
+			.attr("class", "background")
+			.attr("width", width)
+			.attr("height", height)
+			.on("click", click);
+
+		var g = svg.append("g")
+			.attr("id", "states");
+
+		d3.json("data/states_20m.json", function(json) {
+		  g.selectAll("path")
+			  .data(json.features)
+			  .enter().append("path")
+			  .attr("d", path)
+			  .on("click", click)
+			  .on("mouseover", function() {
+			  	d3.select(d3.event.target).classed("highlight", true); 
+			  })
+			  .classed("active", false)
+			  .on("mouseout", function() { 
+			  	d3.select(d3.event.target).classed("highlight", false); 
+			  });
+			  
+		 /* g.selectAll("text")  
+			  .data(json.features)
+			  .enter()
+			  .append("text")
+			  .text(function(d){ return d.properties.NAME; })
+			  .attr("x", function(d){return path.centroid(d)[0]})
+			  .attr("y", function(d){return path.centroid(d)[1]})
+			  .attr("text-anchor","middle")
+    		  .attr('font-size','4pt')
+    		  .attr('stroke', 'teal')
+    		  .attr("fill", "teal");*/
+		});
+		
+
+function click(d) {
+  d3.select("#counties").remove();
+  
+  var x, y, k;
+
+  if (d && centered !== d) {
+    var centroid = path.centroid(d);
+    x = centroid[0];
+    y = centroid[1];
+    k = 4;
+    centered = d;
+  } else {
+    x = width / 2;
+    y = height / 2;
+    k = 1;
+    centered = null;
+  }
+
+  g.selectAll("path")
+      .classed("active", centered && function(d) { return d === centered; });
+
+  g.transition()
+      .duration(1000)
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+      .style("stroke-width", 1.5 / k + "px");
+      
+	county = svg.append('g').attr('id', "counties").attr('class','Blues');
+	
+	d3.json("data/" + d.properties.STATE + ".json", function(json) {
+		
+		county.selectAll("path")
+			  .data(json.features)
+			  .enter()
+			  .append("path")
+			  .attr("d", path)
+			  .attr("class", function(d,i){ return d ? quantize(d,i) : null;})
+			  .on("click", cntyclick)
+			  .on("mouseover", function() {
+			  	d3.select(d3.event.target).classed("highlight", true); 
+			  })
+			  .classed("active", false)
+			  .on("mouseout", function() { 
+			  	d3.select(d3.event.target).classed("highlight", false); 
+				})
+			  .transition()
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+      .style("stroke-width", 1.5 / k + "px");
+      
+      loadCountyData(d.properties.STATE);
+      
+	});
+}
+
+function loadCountyData(stateId) {
+	d3.json("http://api.census.gov/data/2010/sf1?key=93b239eaf27cd41643845af4697fab56b8ea4e8f&get=P0010001,NAME&for=county:*&in=state:" + stateId, function(dataset){
+	
+	county.selectAll('path')
+		  .attr('class', function(d,i) { return quantize(d,i); });
+
+	});
+}
+
+function quantize(d,i){
+	return "q" + Math.min(8, --(d[i][3] * 9 / 12)) + "-9";
+}
+
+function cntyclick(d) {
+	d3.json("http://api.census.gov/data/2010/sf1?key=93b239eaf27cd41643845af4697fab56b8ea4e8f&get=P0010001,NAME&gnis=county:" + d.properties.COUNTYNS10, function(dataset){
+	
+	console.log(dataset[1][1]);
+	});
+}
+	</script>
+-->
+
+<!--
+<script>
+
+var width = 960,
+    height = 500;
+
+var projection = d3.geo.mercator()
+    .center([-96, 38.3])
+    .scale(890)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var tile = d3.geo.tile()
+    .scale(projection.scale() * 2 * Math.PI)
+    .translate(projection([0, 0]))
+    .zoomDelta((window.devicePixelRatio || 1) - .5);
+
+var svg = d3.select(".home-content").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("../us-states-topo.topojson", function(error, topology) {
+  var tiles = tile();
+
+  var defs = svg.append("defs");
+
+  defs.append("path")
+      .attr("id", "land")
+      .datum(topojson.feature(topology, topology.objects.states))
+      .attr("d", path);
+
+  defs.append("clipPath")
+      .attr("id", "clip")
+    .append("use")
+      .attr("xlink:href", "#land");
+
+  svg.append("g")
+      .attr("clip-path", "url(#clip)")
+    .selectAll("image")
+      .data(tiles)
+    .enter().append("image")
+      .attr("xlink:href", function(d) { return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] + ".tiles.mapbox.com/v3/mapbox.natural-earth-2/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+      .attr("width", Math.round(tiles.scale))
+      .attr("height", Math.round(tiles.scale))
+      .attr("x", function(d) { return Math.round((d[0] + tiles.translate[0]) * tiles.scale); })
+      .attr("y", function(d) { return Math.round((d[1] + tiles.translate[1]) * tiles.scale); });
+
+  svg.append("use")
+      .attr("xlink:href", "#land")
+      .attr("class", "stroke");
+      
+	svg.append("path") // thick grey stroke for internal state boundaries
+      .datum(topojson.mesh(topology, topology.objects.states, function(a, b) { return a !== b; }))
+      .attr("d", path)
+      .attr("class", "state-boundary");
+});
+
+</script>	
+</div>-->
+<!--<a href="" ng-click=(updateData())>Click here to get new data</a><br>
+	<sc-Visualization val="data"></sc-Visualization>
+-->

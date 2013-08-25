@@ -1,12 +1,256 @@
+<div id="crime_rate">
+	<h1>Crime Rates</h1>
+</div>
+
+
+<script>
+
+
+
+/*	$.ajax({
+  url: "http://deionlive.com/capstone/app/services/coli.php",
+  success: function(data){
+  	console.log(data);
+  },
+});*/
+</script>
+
+
+<hr>
+
+<div id="emp_stats">
+	<h1>Unemployment Rates</h1>
+</div>
+
+<hr>
+
+<gh-visualization val="data"></gh-visualization> 
+
+<!-- <div class="home-content">
+<script>
+  $(function() {
+    $( "#dialog-confirm" ).dialog({
+      autoOpen: false,
+      modal: true,
+      buttons: {
+        Cancel: function() {
+          $("#cities").val("");
+          $( this ).dialog( "close" );
+        }
+      },
+      show: {
+        duration: 500
+      },
+      hide: {
+        duration: 500
+      }
+    });
+    
+    /*$( "li" ).click(function() {
+    	$( "#dialog-confirm" ).dialog( "open" );
+ 	});*/
+  });
+  </script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var projection = d3.geo.mercator()
+  .center([-96, 38.3])
+  .scale(890)
+  .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+  .projection(projection)
+  .pointRadius(2);
+
+var tile = d3.geo.tile()
+    .scale(projection.scale() * 2 * Math.PI)
+    .translate(projection([0, 0]))
+    .zoomDelta((window.devicePixelRatio || 1) - .5);
+
+var svg = d3.select(".home-content")
+  .insert("svg",".comparison-bar")
+    .attr("width", width)
+    .attr("height", height);
+
+var tooltip = d3.select(".home-content")
+  .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+tooltip.append("div")
+    .attr("class", "state-title");
+
+
+var defs = svg.append("defs");
+
+var ne = svg.append("g")
+  .attr("id", "natural-earth");
+
+var us = svg.append("g")
+  .attr("id", "us");
+
+var states = svg.append("g")
+  .attr("id", "states");
+
+d3.json("../us-states-topo.topojson", function(error, data) {
+  drawNaturalEarth();
+  drawUS(data);
+  drawStates(function() {});
+});
+
+function drawUS(data) {
+  var subunits = topojson.feature(data, data.objects.states);
+	
+	//console.log(subunits.features);
+  
+  us.selectAll("path.subpath")
+      .data(subunits.features)
+      .enter().append("path")
+      .attr('class', function(d) { return 'subunit ' + d.id; })
+      .attr('id', function(d) { return d.id; })
+      .attr("d", path);
+
+}
+
+// Code from D3 United States Example at http://bl.ocks.org/4150951
+function drawNaturalEarth() {
+  d3.json("../us.json", function(error, topology) {
+  var tiles = tile();
+
+  //var defs = svg.append("defs");
+
+  defs.append("path")
+      .attr("id", "land")
+      .datum(topojson.feature(topology, topology.objects.land))
+      .attr("d", path);
+
+  defs.append("clipPath")
+      .attr("id", "clip")
+    .append("use")
+      .attr("xlink:href", "#land");
+
+  ne.append("g")
+      .attr("clip-path", "url(#clip)")
+    .selectAll("image")
+      .data(tiles)
+    .enter().append("image")
+      .attr("xlink:href", function(d) { return "http://" + ["a", "b", "c", "d"][Math.random() * 4 | 0] + ".tiles.mapbox.com/v3/mapbox.natural-earth-2/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+      .attr("width", Math.round(tiles.scale))
+      .attr("height", Math.round(tiles.scale))
+      .attr("x", function(d) { return Math.round((d[0] + tiles.translate[0]) * tiles.scale); })
+      .attr("y", function(d) { return Math.round((d[1] + tiles.translate[1]) * tiles.scale); });
+
+  ne.append("use")
+      .attr("xlink:href", "#land")
+      .attr("class", "stroke");
+});
+}
+
+function drawStates(callback) {
+  d3.json("../us-states.json", function(data) {
+    states.selectAll("path")
+        .data(data.features)
+        .enter().append("path")
+        .attr('class', "state")
+        .attr("title", function(d) { return d.properties.name; })
+        .attr("d", path)
+        .on("mouseenter", function(d) {
+          d3.select(this).classed('hover', true);
+          tooltip.transition()
+            .duration(100)
+            .style("opacity", 1);
+            
+            tooltip.select('.state-title')
+            .text(d.properties.name);
+            
+            
+
+        })
+        .on("mousemove", function(d) {
+          tooltip.style("left", (d3.mouse(this)[0] + 25) + "px")
+            .style("top", (d3.mouse(this)[1] + 25) + "px");
+        })
+        .on("mouseleave", function(d) {
+          d3.select(this).classed('hover', false);
+          tooltip.transition()
+            .duration(100)
+            .style("opacity", 0);
+        })
+        .on("click", function(d){
+        	console.log(d.id + ": " + d.properties.name);
+        	
+        	$( "#dialog-confirm" ).dialog( "open" );
+        	
+        	addPlaces(d.id);
+        	/*$.get("http://api.census.gov/data/2010/sf1?key=93b239eaf27cd41643845af4697fab56b8ea4e8f&get=NAME&for=place:*&in=state:" + d.id , function(json){
+        
+        			
+        			d3.select("#dialog-confirm").selectAll("p")
+        				.data(json)
+        				.enter().append("p")
+        				.text(function(d){return d[0];});
+        				
+        			});*/
+        });
+
+  });
+}
+
+function addPlaces(id) {
+
+$( "#cities" ).autocomplete({
+      source: function(request, response) {
+      	$.ajax({
+          url: "services/places.php?state=" + id,
+          dataType: "json",
+          data: {
+            term: request.term
+          },
+          success: function( data ) {
+            response( $.map( data, function( item ) {
+              return {
+                label: item.name,
+                value: item.name
+              }
+            }));
+          }
+        });
+      },
+      minLength: 1
+    });
+}
+
+  </script>
+
+<div id="dialog-confirm" title="Select a City">
+  
+  
+  <div class="ui-widget">
+  <label for="cities">Search: </label>
+  <input id="cities" placeholder="Enter City"/>
+  </div>
+  
+  
+</div>
+
+
+<div class="comparison-bar">
+	<ul class="comparators">
+		<li ng-repeat="comparator in comparators"><img src="http://placehold.it/140x100"></li>
+	</ul>
+</div>
+</div>
+-->
+<!--
 <section class="sidebar">
 
 </section>
+<input id="searchTextField1" type="text" size="50">
+<input id="searchTextField2" type="text" size="50">
 <google-map center="center" draggable="true" zoom="zoom" markers="markers" mark-click="false"></google-map> 
-
+-->
 
 <!--<div id="map_canvas"></div>-->
-<br />
-
-<h2>--- Compare Debug View ---</h2>
-controller: {{name}}<br />
-Page id: {{params.pageId}}<br/>

@@ -1,16 +1,55 @@
-<section id="search-opt">
+<section id="search-opt" class="home-content">
 	<h1>Compare by entering the city names</h1>
-	<div id="search form">
-		<form name="search" method="get">
-			<input typ="text" name="city1" placeholder="City Name, State" required/>
-			<b><em>VS</em></b>
-			<input typ="text" name="city2" placeholder="City Name, State" required/>
-			<input type="submit" name="compare" value="Compare" />
-		</form>
+	
+	<div class="sidebar" id="sidebar">
+	<input type="text" id="city1" placeholder="City Name, State" ng-model="city" />
+<!--	<h3>Selected Cities</h3>
+	
+	<ul class="factors">
+		<li ng-repeat="cities in myCities"><button class='factor-item'></button>{{cities.name}}</li>
+	</ul> -->
+	<hr class="divider">
+	<h3>Factors</h3>
+	<ul class="factors">
+		<li ng-repeat="factor in factors"><input type="checkbox" name="{{factor.name}}" checked="true"/> {{factor.name}}</li>
+	</ul>
 	</div>
-	<br />
-	<h1>- OR -</h1>
+	
+	<map id="map_canvas"></map>
+	<div class="comparison-bar">
+	<h2>Selected Cities</h2>
+	<ul class="comparators">
+		<li ng-repeat="cities in myCities">{{cities.name}}<br><img src="img/Delete.png" /></li>
+	</ul>
+</div>
+
+	<a href="#/compare" class="medium-button">Compare</a>
+	
+	<hr class="divider">
+	<h1>See what others are saying...</h1>
+		<div class="comment_box" ng-repeat="cities in myCities">
+			<h3>{{cities.name}}</h3>
+			<form name="comments" action="/services/comments.php">
+				<textarea name="comment"></textarea>
+				<input type="hidden" name="cityReviewed" value={{cities.name}} />
+				<input type="submit" name="post" value="Post" />
+			</form>
+		</div>
+	<!-- 
+		Directive for D3 Visualizations
+		<gh-visualization val="data"></gh-visualization> 
+	
+	-->
+	
+	<!--
+	<google-map center="center" draggable="true" zoom="zoom" markers="markers" mark-click="false"></google-map>
+	
+	<div id="search form">
+			
+	</div>
+	
 	<button onclick="initialize()">Use Map to Select</button>
 	<div id="map_canvas"></div>
+	-->
 </section>
 
