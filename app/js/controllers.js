@@ -50,4 +50,8 @@ function WelcomeCrtl($scope, $routeParams) {
 	$scope.params = $routeParams;
 }
 
+function SearchCityCrtl($scope, $routeParams) {
+	
+}
+
 

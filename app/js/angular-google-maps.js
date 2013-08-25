@@ -93,22 +93,54 @@
             center: that.center,
             zoom: that.zoom,
             draggable: that.draggable,
-            scrollwheel: false,
+            scrollwheel: true,
         	streetViewControl: false,
         	mapTypeControl: false,
-            mapTypeId : google.maps.MapTypeId.ROADMAP
+            mapTypeId : google.maps.MapTypeId.ROADMAP,
           }));
           
-          // Initialize First Layer of Counties
+          _instance.setOptions({
+        styles: [
+            {
+                stylers: [
+                	//{ hue: "#ffc477" },
+                    { saturation: 0 }
+                ]
+            },{
+                featureType: "road",
+                stylers: [
+                    { visibility: "simplified" }
+                ]
+            },{
+                featureType: "poi",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            },{
+                featureType: "water",
+                elementType: "labels",
+                stylers: [
+                    { visibility: "off" }
+                ]
+            }
+        ]
+    	});
+    	
+    	var ctaLayer = new google.maps.KmlLayer('http://deionlive.com/capstone/US_Regions_State_Boundaries.kml');
+
+ctaLayer.setMap(_instance);
+           
+   /*      // Initialize First Layer of Counties
     var county_layer1 = new google.maps.FusionTablesLayer({
         query: {
             select: 'geometry',
-            from: '1bt98zxaQcCcxgYnQB0n7edRTSl28qpsoNusFAwo'
+            from: '1-v6i33Lf_FjhRZcHKO0PG2DADipCg4L-dGiucAE'
         },
         suppressInfoWindows:false
     });
 
     county_layer1.setMap(_instance);
+    
 
     // Initialize Second Layer of Counties
     var county_layer2 = new google.maps.FusionTablesLayer({
@@ -120,7 +152,7 @@
     });
 
     county_layer2.setMap(_instance);
-          
+          */
           google.maps.event.addListener(_instance, "dragstart",
               
               function () {

@@ -1,14 +1,27 @@
+<?php
+$user = "USERNAME";
+	if (!empty($_SESSION['loggedn']) && !empty($_SESSION['user'])) {
+		$user= $_SESSION['user'];
+
+	}
+
+
+?>
+
+
 <!doctype html>
 <html lang="en" ng-app="myApp">
 <head>
   <meta charset="utf-8">
-  <title>IdealSpot</title>
+  <title>Relocator App</title>
   <link rel="stylesheet" href="css/app.css"/>
-  
 </head>
 <body> 
   
   <div ng-controller="LoginForm" class="login-menu">
+  <div>{{username = <?= $user ?>}}</div>
+  <div class="sign-in"><a href="#">Preferences &nbsp;</a></div><div class="arrow-down"></div>
+  <br>
   
   	<form name="UserLogin" class="login-form" ng-submit="login()">
   		<label>Username</label>
@@ -26,20 +39,13 @@
   	<p>Results:</p>
   	<p>{{status}}</p>
   	<pre>{{loginResults}}</pre>
-  	<div class="sign-in"><a href="#">Preferences &nbsp;</a></div><div class="arrow-down"></div>
-  <br>
-  
   	-->
   	
   </div>
   
   <section class="header">
-  	<a href="#/welcome"><img src="img/ideal.png" class="logo" /></a>
-  	<ul class="menu">
-  		<li><a href="#/compare" class="menu-item">Compare Cities</a></li>
-  		<li><a href="#/welcome" class="menu-item">About</a></li>
-  		<li><a href="#/welcome" class="menu-item">Contact</a></li>
-  	</ul>
+  	<a href="#/welcome"><img src="img/mylogo.png" /></a>
+  	<a href="#/compare" class="menu-item">Compare Cities</a>
   </section>
   	
   <div ng-controller="MainCont" class="main-content">
@@ -56,11 +62,7 @@
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
   -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBUyh4iYVk_MpAiwzDNm5gnUkjzabJn8AU&sensor=false&language=en"></script>
-  <script src="http://geoxml3.googlecode.com/svn/branches/polys/geoxml3.js"></script>
-  <script src="http://geoxml3.googlecode.com/svn/trunk/ProjectedOverlay.js"></script>
-  <script src="js/geomain.js"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>
